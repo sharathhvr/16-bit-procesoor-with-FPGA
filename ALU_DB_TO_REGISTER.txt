@@ -1,0 +1,30 @@
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+use ieee.std_logic_arith.all;
+use ieee.std_logic_unsigned.all;
+
+entity ALU_DB_TO_REGISTER is
+port( ALU_BUS :in std_logic_vector(15 downto 0);
+ALU_DEST :in std_logic_vector(1 downto 0);
+clk :in std_logic;
+regl,rega,regb,regc :out std_logic_vector(15 downto 0):=x"0000");
+end ALU_DB_TO_REGISTER;
+
+architecture Behavioral of ALU_DB_TO_REGISTER is
+
+begin
+process(ALU_BUS,ALU_DEST,clk)
+begin
+if(rising_edge(clk) ) then
+if( ALU_DEST = "00")then
+rega<=ALU_BUS;
+elsif(ALU_DEST = "01")then
+regb<=ALU_BUS;
+elsif(ALU_DEST = "10")then
+regc<=ALU_BUS;
+elsif(ALU_DEST = "11")then
+regl<=ALU_BUS;
+end if;
+end if;
+end process;
+end Behavioral;

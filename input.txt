@@ -1,0 +1,10 @@
+     RESET<='0';
+	DATA_READY<='1';
+	OPCODE_READY<='1';
+	DATA_IN<=x"0001";
+	wait for 20 ns;
+	RESET<='0';
+	DATA_READY<='1';
+	OPCODE_READY<='1';
+	DATA_IN<=x"0002";
+	wait for 20 ns;

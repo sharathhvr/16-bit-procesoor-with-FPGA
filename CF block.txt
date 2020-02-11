@@ -1,0 +1,94 @@
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+use ieee.std_logic_arith.all;
+use ieee.std_logic_unsigned.all;
+
+
+
+entity CF_BLOCK is
+port(CF_rom :in std_logic_vector(1 downto 0);
+	  carry_out,clk: in std_logic;
+	  cf_out:inout std_logic);
+end CF_BLOCK;
+
+architecture Behavioral of CF_BLOCK is
+
+begin
+process(clk,CF_rom,carry_out)
+begin
+if rising_edge(clk) then
+if(CF_rom = "00") then
+	cf_out<=cf_out;
+elsif(CF_rom = "01") then
+	cf_out<='1';
+elsif(CF_rom = "10") then
+	cf_out<='0';
+elsif(CF_rom = "11") then
+	cf_out<=carry_out;
+end if;
+end if;
+end process;
+end Behavioral;
+
+
+library IEEE;
+use IEEE.Std_logic_1164.all;
+use IEEE.Numeric_Std.all;
+
+entity CF_BLOCK_tb is
+end;
+
+architecture bench of CF_BLOCK_tb is
+
+  component CF_BLOCK
+  port(CF_rom :in std_logic_vector(1 downto 0);
+  	  carry_out,clk: in std_logic;
+  	  cf_out:inout std_logic);
+  end component;
+
+  signal CF_rom: std_logic_vector(1 downto 0):="00";
+  signal carry_out,clk: std_logic:='0';
+  signal cf_out: std_logic:='0';
+
+  constant clock_period: time := 10 ns;
+  signal stop_the_clock: boolean;
+
+begin
+
+  uut: CF_BLOCK port map ( CF_rom    => CF_rom,
+                           carry_out => carry_out,
+                           clk       => clk,
+                           cf_out    => cf_out );
+
+  stimulus: process
+  begin
+  
+    -- Put initialisation code here
+	CF_rom<="11";
+	carry_out<='0';
+	wait for 20 ns;
+	CF_rom<="10";
+	carry_out<='1';
+	wait for 20 ns;
+	CF_rom <="01";
+	carry_out<='0';
+	wait for 20 ns;
+	CF_rom <="00";
+	carry_out<='1';
+	wait for 20 ns;
+    -- Put test bench stimulus code here
+
+    stop_the_clock <= true;
+    wait;
+  end process;
+
+  clocking: process
+  begin
+    while not stop_the_clock loop
+      clk <= '0', '1' after clock_period / 2;
+      wait for clock_period;
+    end loop;
+    wait;
+  end process;
+
+end;

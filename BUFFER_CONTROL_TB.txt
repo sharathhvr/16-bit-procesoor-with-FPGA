@@ -1,0 +1,50 @@
+library IEEE;
+use IEEE.Std_logic_1164.all;
+use IEEE.Numeric_Std.all;
+
+entity BUFFER_CONTROL_tb is
+end;
+
+architecture bench of BUFFER_CONTROL_tb is
+
+  component BUFFER_CONTROL
+  port(DB,regin :in std_logic;
+  a,b,c,d :out std_logic);
+  end component;
+
+  signal DB,regin: std_logic:='0';
+  signal a,b,c,d: std_logic:='0';
+
+begin
+
+  uut: BUFFER_CONTROL port map ( DB    => DB,
+                                 regin => regin,
+                                 a     => a,
+                                 b     => b,
+                                 c     => c,
+                                 d     => d );
+
+  stimulus: process
+  begin
+  
+    -- Put initialisation code here
+		DB<='0';
+		regin<='0';
+		wait for 20ns;
+		DB<='0';
+		regin<='1';
+		wait for 20ns;
+		DB<='1';
+		regin<='0';
+		wait for 20ns;
+		DB<='1';
+		regin<='1';
+		wait for 20ns;
+
+    -- Put test bench stimulus code here
+
+    wait;
+  end process;
+
+
+end;

@@ -1,0 +1,82 @@
+-- Vhdl test bench created from schematic C:\Users\hvrsh\OneDrive\Desktop\XILINX PROJECTS\project2\PROJECT2.sch - Sat May 18 15:15:21 2019
+--
+-- Notes: 
+-- 1) This testbench template has been automatically generated using types
+-- std_logic and std_logic_vector for the ports of the unit under test.
+-- Xilinx recommends that these types always be used for the top-level
+-- I/O of a design in order to guarantee that the testbench will bind
+-- correctly to the timing (post-route) simulation model.
+-- 2) To use this template as your testbench, change the filename to any
+-- name of your choice with the extension .vhd, and use the "Source->Add"
+-- menu in Project Navigator to import the testbench. Then
+-- edit the user defined section below, adding code to generate the 
+-- stimulus for your design.
+--
+LIBRARY ieee;
+USE ieee.std_logic_1164.ALL;
+USE ieee.numeric_std.ALL;
+LIBRARY UNISIM;
+USE UNISIM.Vcomponents.ALL;
+ENTITY PROJECT2_PROJECT2_sch_tb IS
+END PROJECT2_PROJECT2_sch_tb;
+ARCHITECTURE behavioral OF PROJECT2_PROJECT2_sch_tb IS 
+
+   COMPONENT PROJECT2
+   PORT( CLOCK	:	IN	STD_LOGIC; 
+          OPCODE_READY	:	IN	STD_LOGIC; 
+          DATA_READY	:	IN	STD_LOGIC; 
+          RESET	:	IN	STD_LOGIC; 
+          DATA_IN	:	IN	STD_LOGIC_VECTOR (15 DOWNTO 0); 
+          DATA_OUT	:	OUT	STD_LOGIC_VECTOR (15 DOWNTO 0); 
+          CF_out	:	OUT	STD_LOGIC_VECTOR (1 DOWNTO 0));
+   END COMPONENT;
+
+   SIGNAL CLOCK	:	STD_LOGIC;
+   SIGNAL OPCODE_READY	:	STD_LOGIC;
+   SIGNAL DATA_READY	:	STD_LOGIC;
+   SIGNAL RESET	:	STD_LOGIC;
+   SIGNAL DATA_IN	:	STD_LOGIC_VECTOR (15 DOWNTO 0);
+   SIGNAL DATA_OUT	:	STD_LOGIC_VECTOR (15 DOWNTO 0);
+   SIGNAL CF_out	:	STD_LOGIC_VECTOR (1 DOWNTO 0);
+	
+	constant clock_period: time := 10 ns;
+   signal stop_the_clock: boolean;
+
+BEGIN
+
+   UUT: PROJECT2 PORT MAP(
+		CLOCK => CLOCK, 
+		OPCODE_READY => OPCODE_READY, 
+		DATA_READY => DATA_READY, 
+		RESET => RESET, 
+		DATA_IN => DATA_IN, 
+		DATA_OUT => DATA_OUT, 
+		CF_out => CF_out
+   );
+
+-- *** Test Bench - User Defined Section ***
+   tb : PROCESS
+   BEGIN
+	RESET<='0';
+	DATA_READY<='1';
+	OPCODE_READY<='1';
+	DATA_IN<=x"0001";
+	wait for 20 ns;
+	RESET<='0';
+	DATA_READY<='1';
+	OPCODE_READY<='1';
+	DATA_IN<=x"0002";
+	wait for 20 ns;
+	  stop_the_clock <= true;
+      WAIT; -- will wait forever
+   END PROCESS;
+-- *** End Test Bench - User Defined Section ***
+	clocking: process
+  begin
+    while not stop_the_clock loop
+      clock <= '0', '1' after clock_period / 2;
+      wait for clock_period;
+    end loop;
+    wait;
+  end process;
+END;

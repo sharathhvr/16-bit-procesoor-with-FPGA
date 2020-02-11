@@ -1,0 +1,45 @@
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+use ieee.std_logic_arith.all;
+use ieee.std_logic_unsigned.all;
+
+
+entity BRANCH_CONTROL is
+port(NEXTT,BRA,BRDEN,BROP,BRZ,BRP,BRC,BRCF: in std_logic;
+BOP: in std_logic_vector(2 downto 0);
+CE,LOAD :out std_logic);
+end BRANCH_CONTROL;
+
+architecture Behavioral of BRANCH_CONTROL is
+
+begin
+process(BOP)
+begin
+if(BOP = "000") then
+	CE<=NEXTT;
+	LOAD<=NOT NEXTT;
+elsif(BOP ="001") then
+	CE<=BRA;
+	LOAD<=NOT BRA;
+elsif(BOP ="010") then
+	CE<=BRDEN;
+	LOAD<=NOT BRDEN;
+elsif(BOP ="011") then
+	CE<=BROP;
+	LOAD<=NOT BROP;
+elsif(BOP ="100") then
+	CE<=BRZ;
+	LOAD<=NOT BRZ;
+elsif(BOP ="101") then
+	CE<=BRP;
+	LOAD<=NOT BRP;
+elsif(BOP ="110") then
+	CE<=BRC;
+	LOAD<=NOT BRC;
+elsif(BOP ="111") then
+	CE<=BRCF;
+	LOAD<=NOT BRCF;
+end if;
+end process;
+
+end Behavioral;

@@ -1,0 +1,27 @@
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+use ieee.std_logic_arith.all;
+use ieee.std_logic_unsigned.all;
+
+entity ALU_BUS_CNTRL is
+port( data_out,data_in:in std_logic_vector(15 downto 0);
+a,b,d:in std_logic;
+alu_bus:inout std_logic_vector(15 downto 0));
+end ALU_BUS_CNTRL;
+
+architecture Behavioral of ALU_BUS_CNTRL is
+
+begin
+process(a,b,d,alu_bus,data_in,data_out)
+begin
+if b = '1' then
+	alu_bus<=data_in;
+elsif a = '1' then
+	alu_bus<=data_out;
+elsif d = '1' then
+	alu_bus<=data_out;
+else
+	alu_bus<=alu_bus;
+end if;
+end process;	
+end Behavioral;

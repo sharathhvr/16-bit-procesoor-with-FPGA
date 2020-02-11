@@ -1,0 +1,54 @@
+library IEEE;
+use IEEE.Std_logic_1164.all;
+use IEEE.Numeric_Std.all;
+
+entity ALU_BUS_CNTRL_tb is
+end;
+
+architecture bench of ALU_BUS_CNTRL_tb is
+
+  component ALU_BUS_CNTRL
+  port( data_out,data_in:in std_logic_vector(15 downto 0);
+  a,b,d:in std_logic;
+  alu_bus:inout std_logic_vector(15 downto 0));
+  end component;
+
+  signal data_out,data_in: std_logic_vector(15 downto 0);
+  signal a,b,d: std_logic;
+  signal alu_bus: std_logic_vector(15 downto 0);
+
+begin
+
+  uut: ALU_BUS_CNTRL port map ( data_out => data_out,
+                                data_in  => data_in,
+                                a        => a,
+                                b        => b,
+                                d        => d,
+                                alu_bus  => alu_bus );
+
+  stimulus: process
+  begin
+  
+    -- Put initialisation code here
+      b<='1';
+		wait for 20ns;
+		b<='0';
+		wait for 20ns;
+		a<='1';
+		wait for 20ns;
+		a<='0';
+		wait for 20ns;
+		d<='1';
+		wait for 20ns;
+		d<='0';
+		wait for 20ns;
+
+
+    -- Put test bench stimulus code here
+
+    wait;
+  end process;
+
+
+end;
+  

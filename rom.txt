@@ -1,0 +1,99 @@
+library IEEE;
+use IEEE.Std_logic_1164.all;
+use IEEE.Numeric_Std.all;
+
+entity ROM1_tb is
+end;
+
+architecture bench of ROM1_tb is
+
+  component ROM1
+  port(Adin:in std_logic_vector(7 downto 0);
+  	  Branch_addr: out std_logic_vector(7 downto 0);
+  	  DB,regin: out std_logic;
+  	  BOP ,alu_src :out std_logic_vector(2 downto 0);
+  	  cf,alu_dest:out std_logic_vector(1 downto 0);
+  	  alu_ops:out std_logic_vector(3 downto 0));
+  end component;
+
+  signal Adin: std_logic_vector(7 downto 0):=x"00";
+  signal Branch_addr: std_logic_vector(7 downto 0):=x"00";
+  signal DB,regin: std_logic:='0';
+  signal BOP ,alu_src: std_logic_vector(2 downto 0):="000";
+  signal cf,alu_dest: std_logic_vector(1 downto 0):="00";
+  signal alu_ops: std_logic_vector(3 downto 0):="0000";
+
+begin
+
+  uut: ROM1 port map ( Adin        => Adin,
+                       Branch_addr => Branch_addr,
+                       DB          => DB,
+                       regin       => regin,
+                       BOP         => BOP,
+                       alu_src     => alu_src,
+                       cf          => cf,
+                       alu_dest    => alu_dest,
+                       alu_ops     => alu_ops );
+
+  stimulus: process
+  begin
+  
+    -- Put initialisation code here
+	adin<="00000001";
+--	wait for 20 ns;
+--	adin<="00000001";
+--	wait for 20 ns;
+--	adin<="00000010";
+--	wait for 20 ns;
+--	adin<="00000011";
+--	wait for 20 ns;
+
+    -- Put test bench stimulus code here
+
+    wait;
+  end process;
+
+
+end;
+
+
+
+
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+use IEEE.STD_LOGIC_ARITH.ALL;
+use IEEE.STD_LOGIC_UNSIGNED.ALL;
+entity ROM1 is
+port(Adin:in std_logic_vector(7 downto 0);
+	  Branch_addr: out std_logic_vector(7 downto 0);
+	  DB,regin: out std_logic;
+	  BOP ,alu_src :out std_logic_vector(2 downto 0);
+	  cf,alu_dest:out std_logic_vector(1 downto 0);
+	  alu_ops:out std_logic_vector(3 downto 0));
+end ROM1;
+architecture archROM1 of ROM1 is
+constant data1:STD_LOGIC_VECTOR(23 downto 0):="000000000001010000000001";
+constant data2:STD_LOGIC_VECTOR(23 downto 0):="000000000001000000000000";
+constant data3:STD_LOGIC_VECTOR(23 downto 0):="000000000001010000000011";
+constant data4:STD_LOGIC_VECTOR(23 downto 0):="010000000001000000000000";
+constant data5:STD_LOGIC_VECTOR(23 downto 0):="101000000110001100000001";
+
+type rom_array is array(NATURAL range<>) of STD_LOGIC_VECTOR(23 downto 0);
+constant rom:rom_array:=(data1,data2,data3,data4,data5);
+begin
+process(Adin)
+variable j:integer;
+variable M: std_logic_vector(23 downto 0);
+begin
+j:=conv_integer(Adin);
+M:=rom(j);
+Branch_addr<=M(7 downto 0);
+DB<=M(8);
+BOP<=M(11 downto 9);
+regin<=M(12);
+cf<=M(14 downto 13);
+alu_ops<=M(18 downto 15);
+alu_src<=M(21 downto 19);
+alu_dest<=M(23 downto 22);
+end process;
+end archROM1;

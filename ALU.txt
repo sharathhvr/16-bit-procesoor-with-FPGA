@@ -1,0 +1,87 @@
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+use ieee.std_logic_arith.all;
+use ieee.std_logic_unsigned.all;  
+use IEEE.NUMERIC_STD.ALL;
+
+entity ALU is
+port(ta,tb :in std_logic_vector(15 downto 0);
+cf,clk : in std_logic;
+alu_ops:in std_logic_vector(3 downto 0);
+zf,sf,carry: out std_logic;
+alu_out:out std_logic_vector(15 downto 0));
+end ALU;
+
+architecture arch_ALU of ALU is
+signal temp_aluout :std_logic_vector(15 downto 0):="0000000000000000";
+signal xc: std_logic;
+begin
+process(clk,ta,tb,cf)
+begin
+if(rising_edge(clk))then
+---ADD----
+if(alu_ops="0000")then  
+	temp_aluout<=ta+tb;
+	if(not ta)<tb then xc<='1';end if;
+---SUB----
+elsif(alu_ops="0001")then
+	temp_aluout<=ta+(not tb)+1;
+	if ta<tb then xc<='1';end if;
+---AND----
+elsif(alu_ops="0010")then
+	for i in 0 to 15 loop
+	temp_aluout(i)<=ta(i) and tb(i);
+	end loop;
+---OR-----
+elsif(alu_ops="0011")then
+	for i in 0 to 15 loop
+	temp_aluout(i)<=ta(i) or tb(i);
+	end loop;
+---XOR----
+elsif(alu_ops="0100")then
+	for i in 0 to 15 loop
+	temp_aluout(i)<=ta(i) xor tb(i);
+	end loop;
+---PASS---
+elsif(alu_ops="0101")then
+	temp_aluout<=temp_aluout;
+---NOT----
+elsif(alu_ops="0110")then
+	for i in 0 to 15 loop
+	temp_aluout(i)<=not ta(i);
+	end loop;
+---SHLCF---	
+elsif(alu_ops="0111")then
+	temp_aluout<= ta(14 downto 0) & cf; 
+	xc<=ta(15);
+---SHRCF---
+elsif(alu_ops="1000")then
+	temp_aluout<= cf & ta(15 downto 1);
+	xc<=ta(0);
+---INCR----	
+elsif(alu_ops="1001")then
+	temp_aluout<=ta+x"0001";
+	if temp_aluout = x"0000" then  xc<='1'; end if;
+---DECR----
+elsif(alu_ops="1010")then
+	temp_aluout<=ta-x"0001";
+	if temp_aluout = x"FFFF" then  xc<='1';end if;
+---CLEAR---
+elsif(alu_ops="1011")then
+	temp_aluout<="0000000000000000";
+end if;
+alu_out<=temp_aluout(15 downto 0);
+if(temp_aluout=x"0000")then
+zf<='1';
+else
+zf<='0';
+end if;
+if(temp_aluout(15)='1')then
+sf<='1';
+else
+sf<='0';
+end if;
+carry<=xc;
+end if;
+end process;
+end arch_ALU; 

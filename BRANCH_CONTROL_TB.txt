@@ -1,0 +1,75 @@
+library IEEE;
+use IEEE.Std_logic_1164.all;
+use IEEE.Numeric_Std.all;
+
+entity BRANCH_CONTROL_tb is
+end;
+
+architecture bench of BRANCH_CONTROL_tb is
+
+  component BRANCH_CONTROL
+  port(NEXTT,BRA,BRDEN,BROP,BRZ,BRP,BRC,BRCF: in std_logic;
+  BOP: in std_logic_vector(2 downto 0);
+  CE,LOAD :out std_logic);
+  end component;
+
+  signal NEXTT,BRA,BRDEN,BROP,BRZ,BRP,BRC,BRCF: std_logic:='0';
+  signal BOP: std_logic_vector(2 downto 0);
+  signal CE,LOAD: std_logic:='0';
+
+begin
+
+  uut: BRANCH_CONTROL port map ( NEXTT => NEXTT,
+                                 BRA   => BRA,
+                                 BRDEN => BRDEN,
+                                 BROP  => BROP,
+                                 BRZ   => BRZ,
+                                 BRP   => BRP,
+                                 BRC   => BRC,
+                                 BRCF  => BRCF,
+                                 BOP   => BOP,
+                                 CE    => CE,
+                                 LOAD  => LOAD );
+
+  stimulus: process
+  begin
+  
+    -- Put initialisation code here
+	  NEXTT <= '1';
+     BRA <= '0' ;
+     BRDEN <='1';
+     BROP <= '0';
+     BRZ <=  '1';
+     BRP <=  '0';
+     BRC <=  '1';
+     BRCF <=  '0';
+     BOP <=  "000";
+			wait for 20 ns;
+	  NEXTT <= '1';
+     BRA <= '0' ;
+     BRDEN <='1';
+     BROP <= '0';
+     BRZ <=  '1';
+     BRP <=  '0';
+     BRC <=  '1';
+     BRCF <=  '0';
+     BOP <=  "001";
+			wait for 20 ns;
+	  NEXTT <= '1';
+     BRA <= '0' ;
+     BRDEN <='1';
+     BROP <= '0';
+     BRZ <=  '1';
+     BRP <=  '0';
+     BRC <=  '1';
+     BRCF <=  '0';
+     BOP <=  "010";
+			wait for 20 ns;
+
+    -- Put test bench stimulus code here
+
+    wait;
+  end process;
+
+
+end;
